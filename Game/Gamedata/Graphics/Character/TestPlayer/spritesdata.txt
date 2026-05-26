@@ -1,0 +1,41 @@
+TestPlayer
+[Icon]
+down1 -1
+[Default]
+down1 -1
+[LeftStand]
+left1 -1
+[RightStand]
+right1 -1
+[DownStand]
+down1 -1
+[UpStand]
+up1 -1
+[LeftWalk]
+left1 16
+left2 16
+left1 16
+left3 16
+[RightWalk]
+right1 16
+right2 16
+right1 16
+right3 16
+[DownWalk]
+down1 16
+down2 16
+down1 16
+down3 16
+[UpWalk]
+up1 16
+up2 16
+up1 16
+up3 16
+[IdleLeft]
+idle_left -1
+[IdleRight]
+idle_right -1
+[IdleDown]
+idle_down -1
+[IdleUp]
+up1 -1
