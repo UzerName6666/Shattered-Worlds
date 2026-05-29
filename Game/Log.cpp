@@ -2,7 +2,7 @@
 #include <ctime>
 #include <fstream>
 
-void Logger::Write(MessageType Type, std::wstring Message){
+void ShatteredEngine::Logger::Write(MessageType Type, std::wstring Message){
 	std::wofstream Logfile(L"Log.txt", std::ios_base::app);
 	if(!Logfile.is_open()){
 		return;
@@ -27,7 +27,7 @@ void Logger::Write(MessageType Type, std::wstring Message){
 	Logfile << Message << L"\n";   
 }
 
-void Logger::Clear(){
+void ShatteredEngine::Logger::Init(){
 	std::wofstream Logfile(L"Log.txt");
 	if(!Logfile.is_open()){
 		return;

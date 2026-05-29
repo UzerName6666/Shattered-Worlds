@@ -22,12 +22,12 @@ void Map::SetMap(std::vector<std::vector<int>> map){
 			int T = Maze[0].size();
 			for(int i = 1; i < Maze.size(); i++){
 				if(Maze[i].size() != T){
-					Logger::Write(Logger::Warn, L"Map sise is corrupted");
+					ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"Map sise is corrupted");
 					Loaded = false;
 					return;
 				}
 			}
-			Logger::Write(Logger::Message, L"Map loaded");
+			ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Map loaded");
 			Loaded = true;
 		}
 	}
@@ -57,14 +57,15 @@ int SpecialTileID(int TileID){
 	return -1;
 }
 
-void Level::Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, Camera& Cam, bool Col){
+void Level::Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, ShatteredEngine::Camera& Cam, bool Col){
 	if(!LevelMap.IsLoaded()){
 		return;
 	}
 	if(Col){
 		for(int i = x1; i <= x2; i++){
 			for(int j = y1; j <= y2; j++){
-				Tiles[0].Draw(Cam, i * 32 + ofx, j * 32 + ofy, LevelMap.GetTileID(i, j));
+				ShatteredEngine::Vector2D PCord(i * 32 + ofx, j * 32 + ofy);
+				Tiles[0].Draw(Cam, PCord, LevelMap.GetTileID(i, j));
 			}
 		}
 	}
@@ -75,11 +76,12 @@ void Level::Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, Camera& Cam, 
 				if(TileID < 0){
 					TileID = SpecialTileID(TileID);
 				}
+				ShatteredEngine::Vector2D PCord(i * 32 + ofx, j * 32 + ofy);
 				if(TileID / 16 >= Tiles.size()){
-					Tiles[0].Draw(Cam, i * 32 + ofx, j * 32 + ofy, TileID % 16);
+					Tiles[0].Draw(Cam, PCord, TileID % 16);
 				}
 				else{
-					Tiles[TileID / 16].Draw(Cam, i * 32 + ofx, j * 32 + ofy, TileID % 16);
+					Tiles[TileID / 16].Draw(Cam, PCord, TileID % 16);
 				}
 			}
 		}
@@ -90,13 +92,14 @@ int Level::CollisionTileID(int x, int y){
 	return LevelMap.GetTileID(x, y);
 }
 
-bool Map::SetCameraSize(Camera& Cam){
+bool Map::SetCameraSize(ShatteredEngine::Camera& Cam){
 	if(!Loaded){
 		return false;
 	}
-	return Cam.SetRoomSize(Maze[0].size() * 32, Maze.size() * 32);
+	ShatteredEngine::Vector2D Cord(Maze[0].size() * 32, Maze.size() * 32);
+	return Cam.SetRoomSize(Cord);
 }
 
-bool Level::SetCameraSize(Camera& Cam){
+bool Level::SetCameraSize(ShatteredEngine::Camera& Cam){
 	return LevelMap.SetCameraSize(Cam);
 }

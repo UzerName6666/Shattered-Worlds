@@ -17,13 +17,13 @@ void TileSet::Open(std::wstring Path, ID2D1RenderTarget* RenderTarget){
 		ID2D1Bitmap* Image = LoadImage(tstr, RenderTarget);
 		if(!Image){
 			std::wstring M = L"Tile " + std::to_wstring(i) + L" doesn't found at " + Path;
-			Logger::Write(Logger::Warn, M);
+			ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, M);
 			Loaded = false;
 		}
 		Tiles[i] = Image;
 	}
 	if(Loaded){
-		Logger::Write(Logger::Message, L"Tileset from " + Path + L" loaded without problems");
+		ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Tileset from " + Path + L" loaded without problems");
 	}
 }
 
@@ -35,7 +35,7 @@ ID2D1Bitmap& TileSet::Tile(int i){
 	return *Tiles[i];
 }
 
-void TileSet::Draw(Camera& Cam, int x, int y, int i){
+void TileSet::Draw(ShatteredEngine::Camera& Cam, ShatteredEngine::Vector2D Cord, int i){
 	if(!Loaded){
 		return;
 	}
@@ -49,5 +49,5 @@ void TileSet::Draw(Camera& Cam, int x, int y, int i){
 	}
 	ID2D1Bitmap* Sprite = Tiles[i];
 	D2D1_SIZE_F Size = Sprite -> GetSize();
-	Cam.Draw(x, y, Sprite);
+	Cam.Draw(Cord, Sprite);
 }

@@ -1,6 +1,5 @@
-#include "InputManager.h"
-
-PlayerInput::PlayerInput(){
+#include "Engine.h"
+ShatteredEngine::PlayerInput::PlayerInput(){
 	Up = false;
 	Down = false;
 	Right = false;
@@ -8,16 +7,26 @@ PlayerInput::PlayerInput(){
 	Action1 = false;
 }
 
-InputManager::InputManager(){
+ShatteredEngine::InputManager::InputManager(){
 	PlayerInput D;
 	Players.push_back(D);
 }
 
-const PlayerInput& InputManager::GetPlayerInput(int PlayerID){
+const ShatteredEngine::PlayerInput& ShatteredEngine::InputManager::GetPlayerInput(int PlayerID){
 	return Players[0];
 }
 
-void InputManager::Update(LPARAM lparam){
+void ShatteredEngine::InputManager::AddKeyboard(HWND hwnd){
+	RAWINPUTDEVICE rid;
+	rid.usUsagePage = 0x01;
+	rid.usUsage = 0x06;
+	rid.dwFlags = 0;
+	rid.hwndTarget = hwnd;
+	RegisterRawInputDevices(&rid, 1, sizeof(rid));
+	ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Keyboard registered");
+}
+
+void ShatteredEngine::InputManager::Update(LPARAM lparam){
 	UINT dwSize = 0;
 	GetRawInputData((HRAWINPUT)lparam, RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
 	std::vector<BYTE> buffer(dwSize);

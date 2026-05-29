@@ -5,9 +5,7 @@
 #include <vector>
 #include <array>
 #include <map>
-#include "InputManager.h"
-#include "Camera.h"
-
+#include "Engine.h"
 class CharacterSprite{
 	protected:
 	struct DataFrames{
@@ -29,7 +27,7 @@ class CharacterSprite{
 	CharacterSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
 	CharacterSprite();
 	void Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
-	void DrawSprite(int SpriteID, int x, int y, Camera& Cam);
+	void DrawSprite(int SpriteID, ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam);
 	bool IsLoaded();
 	bool IsUsable();
 	bool SetAnimation(std::wstring AnimName, bool Reset);
@@ -57,15 +55,15 @@ class PlayerCharacter: protected CharacterSprite{
 	void SetMovementAnims(std::array<std::wstring, 12> NewMAnim);
 
 	void LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
-	void SetPosition(int x, int y);
+	void SetPosition(ShatteredEngine::Vector2D Cord);
 	int PosX();
 	int PosY();
 	int TilePosX();
 	int TilePosY();
 
-	void Move(const PlayerInput& PIn, int TileID);
+	void Move(const ShatteredEngine::PlayerInput& PIn, int TileID);
 
-	void Draw(int x, int y, Camera& Cam);
+	void Draw(ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam);
 
 	int XMapOffset(int MaxX, int Range);
 	int YMapOffset(int MaxY, int Range);

@@ -18,3 +18,7 @@ Game/Laba.ilk
 Game/Laba.pdb
 Game/Laba.winmd
 Game/test
+Game/Engine.obj
+Game/Timer.obj
+Game/Vector2D.obj
+Game/Window.obj

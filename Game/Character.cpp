@@ -20,7 +20,7 @@ bool CharacterSprite::IsUsable(){
 
 bool CharacterSprite::SetAnimation(std::wstring AnimName, bool Reset = true){
 	if(Anim.find(AnimName) == Anim.end()){
-		Logger::Write(Logger::Warn, L"Animation with name \"" + AnimName + L"\" doesn't found inside of " + CharacterName);
+		ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"Animation with name \"" + AnimName + L"\" doesn't found inside of " + CharacterName);
 		CurrentAnimName = L"Default";
 		Time = 0;
 		AnimFrame = 0;
@@ -67,7 +67,7 @@ void CharacterSprite::PlayAnimation(int time){
 void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 	std::wifstream CharData(Path + L"\\spritesdata.txt");
 	if(CharData.is_open()){
-		Logger::Write(Logger::Message, L"Loading character sprites from " + Path);
+		ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Loading character sprites from " + Path);
 		Loaded = false;
 		Usable = false;
 		std::wstring Line;
@@ -91,7 +91,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 					i++;
 				}
 				if(Line[i] != L']'){
-					Logger::Write(Logger::Warn, L"File had error with animation name at line " + std::to_wstring(LineCounter));
+					ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File had error with animation name at line " + std::to_wstring(LineCounter));
 					return;
 				}
 			}
@@ -103,7 +103,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 					i++;
 				}
 				if(i == Line.size()){
-					Logger::Write(Logger::Warn, L"File had error with sprite name at line " + std::to_wstring(LineCounter));
+					ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File had error with sprite name at line " + std::to_wstring(LineCounter));
 					return;
 				}
 				i++;
@@ -113,7 +113,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 					std::wstring SPath = Path + L"\\" + FrameName + L".png";
 					ID2D1Bitmap* Sprite = LoadImage(SPath, pRenderTarget);
 					if(Sprite == nullptr){
-						Logger::Write(Logger::Warn, L"File at " + SPath + L"Doesn't found");
+						ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File at " + SPath + L"Doesn't found");
 						return;
 					}
 					ListAnimFrames[FrameName] = ID;
@@ -126,7 +126,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 				}
 				if(Line[i] == L'-'){
 					if(Line[i + 1] != L'1' || Line.size() != i + 2){
-						Logger::Write(Logger::Warn, L"File had error with sprite data at line " + std::to_wstring(LineCounter));
+						ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File had error with sprite data at line " + std::to_wstring(LineCounter));
 						return;
 					}
 					NewAnimFrames.push_back({SpriteID, -1});
@@ -136,7 +136,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 					for(int j = i; j < Line.size(); j++){
 						int numL = static_cast<int>(Line[j]) - static_cast<int>(L'0');
 						if(0 > numL || numL > 9){
-							Logger::Write(Logger::Warn, L"File had error with sprite data at line " + std::to_wstring(LineCounter));
+							ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File had error with sprite data at line " + std::to_wstring(LineCounter));
 							return;
 						}
 						duration = duration * 10 + numL;
@@ -149,15 +149,15 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 	}
 	AnimFrame = 0;
 	CurrentAnimName = L"Default";
-	Logger::Write(Logger::Message, L"Checking needed animations");
+	ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Checking needed animations");
 	Loaded = true;
 	CheckLoad();
 }
 
-void CharacterSprite::DrawSprite(int SpriteID, int x, int y, Camera& Cam){
+void CharacterSprite::DrawSprite(int SpriteID, ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam){
 	if(SpriteID >= 0 && SpriteID < AnimFrames.size()){
 		ID2D1Bitmap* Sprite = AnimFrames[SpriteID];
-		Cam.Draw(x, y, Sprite);
+		Cam.Draw(Cord, Sprite);
 	}
 }
 
@@ -170,11 +170,11 @@ void CharacterSprite::CheckLoad(){
 	};
 	for(int i = 0; i < 10; i++){
 		if(Anim.find(CheckList[i]) == Anim.end() ){
-			Logger::Write(Logger::Error, L"Character doesn't have requered [" + CheckList[i] + L"] animation");
+			ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Error, L"Character doesn't have requered [" + CheckList[i] + L"] animation");
 			return;
 		}
 	}
-	Logger::Write(Logger::Message, L"Character loaded succesfully");
+	ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Character loaded succesfully");
 	Usable = true;
 }
 
@@ -226,19 +226,19 @@ void PlayerCharacter::LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTa
 	}
 }
 
-void PlayerCharacter::Draw(int x, int y, Camera& Cam){
-	DrawSprite(Anim[CurrentAnimName][AnimFrame].SpriteID, x, y, Cam);
+void PlayerCharacter::Draw(ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam){
+	DrawSprite(Anim[CurrentAnimName][AnimFrame].SpriteID, Cord, Cam);
 }
 
-void PlayerCharacter::SetPosition(int x, int y){
-	if(x > 0){
-		CordX = x;
+void PlayerCharacter::SetPosition(ShatteredEngine::Vector2D Cord){
+	if(Cord.x > 0){
+		CordX = Cord.x;
 	}
 	else{
 		CordX = 0;
 	}
-	if(y > 0){
-		CordY = y;
+	if(Cord.y > 0){
+		CordY = Cord.y;
 	}
 	else{
 		CordY = 0;
@@ -261,7 +261,7 @@ int PlayerCharacter::PosY(){
 	return CordY * 32 + OffsetY + 4;
 }
 //TreeWork67
-void PlayerCharacter::Move(const PlayerInput& PIn, int TileID){
+void PlayerCharacter::Move(const ShatteredEngine::PlayerInput& PIn, int TileID){
 	bool Active = true;
 	if(PIn.Up){
 		DirBuffer = 0;

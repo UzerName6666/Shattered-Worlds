@@ -1,13 +1,12 @@
-#include "Game.h"
 #include "Character.h"
 #include "Tileset.h"
 #include "Room.h"
 #include "MazeGen.h"
-
+#include "Engine.h"
 Level TestMaze;
 PlayerCharacter TestCharacter;
 
-void Init(Camera& PlayerCamera){
+void Init(ShatteredEngine::Camera& PlayerCamera){
 	TileSet DebugSet(L"Gamedata\\Graphics\\Tileset\\Test", PlayerCamera.GetRenderTarget());
 	TileSet GrassSet(L"Gamedata\\Graphics\\Tileset\\Grass", PlayerCamera.GetRenderTarget());
 	Map TestMap(CreateLevelMap1());
@@ -15,25 +14,29 @@ void Init(Camera& PlayerCamera){
 	TestMaze.AddTileSet(GrassSet);
 	TestMaze.SetCameraSize(PlayerCamera);
 	TestCharacter.LoadSprite(L"Gamedata\\Graphics\\Character\\TestPlayer", PlayerCamera.GetRenderTarget());
-	TestCharacter.SetPosition(31, 12);
+	ShatteredEngine::Vector2D StartPos(31, 12);
+	TestCharacter.SetPosition(StartPos);
 }
 
-void Update(Camera& PlayerCamera, InputManager& InputM){
-	PlayerInput PIn= InputM.GetPlayerInput(0);
+void Update(ShatteredEngine::Camera& PlayerCamera, ShatteredEngine::InputManager& InputM){
+	ShatteredEngine::PlayerInput PIn= InputM.GetPlayerInput(0);
 	if(PIn.Action1){
 		TestCharacter.Move(PIn, 0);
 	}
 	else{
 		TestCharacter.Move(PIn, TestMaze.CollisionTileID(TestCharacter.TilePosX(), TestCharacter.TilePosY()));
 	}
-	PlayerCamera.SetPosition(TestCharacter.PosX() + 156, TestCharacter.PosY() + 156);
+	ShatteredEngine::Vector2D CameraOffset(TestCharacter.PosX() + 156, TestCharacter.PosY() + 156);
+	PlayerCamera.SetPosition(CameraOffset);
 	if(PIn.Action1){
+		ShatteredEngine::Vector2D CharacterPos(TestCharacter.PosX(), TestCharacter.PosY());
 		TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, true);
-		TestCharacter.Draw(TestCharacter.PosX(), TestCharacter.PosY(), PlayerCamera);
+		TestCharacter.Draw(CharacterPos, PlayerCamera);
 	}
 	else{
+		ShatteredEngine::Vector2D CharacterPos(TestCharacter.PosX(), TestCharacter.PosY() - 8);
 		TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, false);
-		TestCharacter.Draw(TestCharacter.PosX(), TestCharacter.PosY() - 8, PlayerCamera);
+		TestCharacter.Draw(CharacterPos, PlayerCamera);
 	}
 	
 }

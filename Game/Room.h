@@ -1,9 +1,7 @@
 #pragma once
 #include <vector>
 #include "Tileset.h"
-#include "Direct2D.h"
-#include "Camera.h"
-
+#include "Engine.h"
 class Map{
 	protected:
 	std::vector<std::vector<int>> Maze;
@@ -14,7 +12,7 @@ class Map{
 	Map(std::vector<std::vector<int>> map);
 	void SetMap(std::vector<std::vector<int>> map);
 	int GetTileID(int x, int y);
-	bool SetCameraSize(Camera& Cam);
+	bool SetCameraSize(ShatteredEngine::Camera& Cam);
 };
 
 class Level{
@@ -25,8 +23,8 @@ class Level{
 	public:
 	Level();
 	Level(Map Collision, TileSet DebugTileSet);
-	void Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, Camera& Cam, bool Col = false);
+	void Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, ShatteredEngine::Camera& Cam, bool Col = false);
 	int CollisionTileID(int x, int y);
-	bool SetCameraSize(Camera& Cam);
+	bool SetCameraSize(ShatteredEngine::Camera& Cam);
 	void AddTileSet(TileSet NewTileset);
 };
