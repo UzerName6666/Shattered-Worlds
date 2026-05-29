@@ -14,6 +14,5 @@ class TileSet{
 		ID2D1Bitmap& Tile(int i);
 		void Open(std::wstring Path, ID2D1RenderTarget* RenderTarget);
 		bool IsLoaded();	
-		//void Draw(ID2D1RenderTarget* pRenderTarget, int x, int y, int i);
 		void Draw(Camera& Cam, int x, int y, int i);
 };

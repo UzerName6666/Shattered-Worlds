@@ -3,7 +3,7 @@
 #include "Log.h"
 #include "InputManager.h"
 #include "Game.h"
-#include "Camera.h"
+#include "Camera.h" 
 
 ID2D1HwndRenderTarget* pRenderTarget = nullptr;
 InputManager InputM;

@@ -28,4 +28,5 @@ class Level{
 	void Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, Camera& Cam, bool Col = false);
 	int CollisionTileID(int x, int y);
 	bool SetCameraSize(Camera& Cam);
+	void AddTileSet(TileSet NewTileset);
 };

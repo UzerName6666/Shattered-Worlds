@@ -46,14 +46,41 @@ Level::Level(Map Collision, TileSet DebugTileSet){
 	Tiles.push_back(DebugTileSet);
 }
 
+void Level::AddTileSet(TileSet NewTileset){
+	Tiles.push_back(NewTileset);
+}
+
+int SpecialTileID(int TileID){
+	if(TileID == -1){
+		return -1;
+	}
+	return -1;
+}
+
 void Level::Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, Camera& Cam, bool Col){
+	if(!LevelMap.IsLoaded()){
+		return;
+	}
 	if(Col){
-		if(!LevelMap.IsLoaded()){
-			return;
-		}
 		for(int i = x1; i <= x2; i++){
 			for(int j = y1; j <= y2; j++){
 				Tiles[0].Draw(Cam, i * 32 + ofx, j * 32 + ofy, LevelMap.GetTileID(i, j));
+			}
+		}
+	}
+	else{
+		for(int i = x1; i <= x2; i++){
+			for(int j = y1; j <= y2; j++){
+				int TileID = LevelMap.GetTileID(i, j);
+				if(TileID < 0){
+					TileID = SpecialTileID(TileID);
+				}
+				if(TileID / 16 >= Tiles.size()){
+					Tiles[0].Draw(Cam, i * 32 + ofx, j * 32 + ofy, TileID % 16);
+				}
+				else{
+					Tiles[TileID / 16].Draw(Cam, i * 32 + ofx, j * 32 + ofy, TileID % 16);
+				}
 			}
 		}
 	}

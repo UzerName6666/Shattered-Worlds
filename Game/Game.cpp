@@ -4,14 +4,15 @@
 #include "Room.h"
 #include "MazeGen.h"
 
-TileSet TestTileSet;
 Level TestMaze;
 PlayerCharacter TestCharacter;
 
 void Init(Camera& PlayerCamera){
-	TestTileSet.Open(L"Gamedata\\Graphics\\Tileset\\Test", PlayerCamera.GetRenderTarget());
+	TileSet DebugSet(L"Gamedata\\Graphics\\Tileset\\Test", PlayerCamera.GetRenderTarget());
+	TileSet GrassSet(L"Gamedata\\Graphics\\Tileset\\Grass", PlayerCamera.GetRenderTarget());
 	Map TestMap(CreateLevelMap1());
-	TestMaze = Level(TestMap, TestTileSet);
+	TestMaze = Level(TestMap, DebugSet);
+	TestMaze.AddTileSet(GrassSet);
 	TestMaze.SetCameraSize(PlayerCamera);
 	TestCharacter.LoadSprite(L"Gamedata\\Graphics\\Character\\TestPlayer", PlayerCamera.GetRenderTarget());
 	TestCharacter.SetPosition(31, 12);
@@ -26,6 +27,13 @@ void Update(Camera& PlayerCamera, InputManager& InputM){
 		TestCharacter.Move(PIn, TestMaze.CollisionTileID(TestCharacter.TilePosX(), TestCharacter.TilePosY()));
 	}
 	PlayerCamera.SetPosition(TestCharacter.PosX() + 156, TestCharacter.PosY() + 156);
-	TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, true);
-	TestCharacter.Draw(TestCharacter.PosX(), TestCharacter.PosY(), PlayerCamera);
+	if(PIn.Action1){
+		TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, true);
+		TestCharacter.Draw(TestCharacter.PosX(), TestCharacter.PosY(), PlayerCamera);
+	}
+	else{
+		TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, false);
+		TestCharacter.Draw(TestCharacter.PosX(), TestCharacter.PosY() - 8, PlayerCamera);
+	}
+	
 }

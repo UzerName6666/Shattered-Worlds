@@ -74,7 +74,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 		std::getline(CharData, CharacterName);
 		std::wstring NewAnimName = L"";
 		std::vector<DataFrames> NewAnimFrames;
-		std::unordered_map<std::wstring, int> ListAnimFrames;
+		std::map<std::wstring, int> ListAnimFrames;
 		int ID = 0;
 		int LineCounter = 0;
 		while (std::getline(CharData, Line)){
@@ -107,12 +107,13 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 					return;
 				}
 				i++;
-				std::unordered_map<std::wstring, int>::iterator FindFrame = ListAnimFrames.find(FrameName);
+				std::map<std::wstring, int>::iterator FindFrame = ListAnimFrames.find(FrameName);
 				int SpriteID;
 				if(FindFrame == ListAnimFrames.end()){
-					std::wstring SPath = Path + L"\\" + FrameName + L".bmp";
+					std::wstring SPath = Path + L"\\" + FrameName + L".png";
 					ID2D1Bitmap* Sprite = LoadImage(SPath, pRenderTarget);
 					if(Sprite == nullptr){
+						Logger::Write(Logger::Warn, L"File at " + SPath + L"Doesn't found");
 						return;
 					}
 					ListAnimFrames[FrameName] = ID;
@@ -185,12 +186,13 @@ PlayerCharacter::PlayerCharacter(): CharacterSprite(){
 
 }
 
-void PlayerCharacter::SetMovementAnims(std::array<std::wstring, 8> NewMAnim){
-	std::array<std::wstring, 8> DefaultAnims = {
+void PlayerCharacter::SetMovementAnims(std::array<std::wstring, 12> NewMAnim){
+	std::array<std::wstring, 12> DefaultAnims = {
 		L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
-		L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk"
+		L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk",
+		L"IdleUp", L"IdleRight", L"IdleDown", L"IdleLeft"
 	};
-	for(int i = 0; i < 8; i++){
+	for(int i = 0; i < 12; i++){
 		if(CheckAnim(NewMAnim[i])){
 			MovementAnims[i] = NewMAnim[i];
 		}
@@ -203,9 +205,10 @@ void PlayerCharacter::SetMovementAnims(std::array<std::wstring, 8> NewMAnim){
 
 PlayerCharacter::PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTarget): CharacterSprite(Path, pRenderTarget){
 	if(Usable){
-		std::array<std::wstring, 8> DefaultAnims = {
+		std::array<std::wstring, 12> DefaultAnims = {
 			L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
-			L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk"
+			L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk",
+			L"IdleUp", L"IdleRight", L"IdleDown", L"IdleLeft"
 		};
 		SetMovementAnims(DefaultAnims);
 	}
@@ -214,9 +217,10 @@ PlayerCharacter::PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTa
 void PlayerCharacter::LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 	Open(Path, pRenderTarget);
 	if(Usable){
-		std::array<std::wstring, 8> DefaultAnims = {
-			L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
-			L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk"
+		std::array<std::wstring, 12> DefaultAnims = {
+			L"ArtUpStand", L"ArtRightStand", L"ArtDownStand", L"ArtLeftStand",
+			L"ArtUpWalk", L"ArtRightWalk", L"ArtDownWalk", L"ArtLeftWalk",
+			L"ArtUpStand", L"ArtRightStand", L"ArtDownStand", L"ArtLeftStand"
 		};
 		SetMovementAnims(DefaultAnims);
 	}
@@ -284,24 +288,16 @@ void PlayerCharacter::Move(const PlayerInput& PIn, int TileID){
 	if(IdleTimer >= 60 && !Idle){
 		Idle = true;
 		if(SpriteDirection == 0){
-			if(CheckAnim(L"IdleUp")){
-				SetAnimation(L"IdleUp");
-			}
+			SetAnimation(MovementAnims[8]);
 		}
 		else if(SpriteDirection == 1){
-			if(CheckAnim(L"IdleRight")){
-				SetAnimation(L"IdleRight");
-			}
+			SetAnimation(MovementAnims[9]);
 		}
 		else if(SpriteDirection == 2){
-			if(CheckAnim(L"IdleDown")){
-				SetAnimation(L"IdleDown");
-			}
+			SetAnimation(MovementAnims[10]);
 		}
 		else if(SpriteDirection == 3){
-			if(CheckAnim(L"IdleLeft")){
-				SetAnimation(L"IdleLeft");
-			}
+			SetAnimation(MovementAnims[11]);
 		}
 	}
 	if(!Active && Idle){

@@ -309,7 +309,24 @@ std::vector<std::vector<int>> CreateLevelMap1(){
 	}
 	GenerateMaze(map, 0, 25, 0, 25);
 	GenerateMaze(map, 38, 63, 0, 25);
-	
+
+	for(int i = 0; i < 25; i++){
+		for(int j = 0; j < 25; j++){
+			map[i][j] += 16;
+		}
+		for(int j = 38; j < 63; j++){
+			map[i][j] += 16;
+		}
+	}
+
+	for(int i = 10; i < 15; i++){
+		for(int j = 10; j < 15; j++){
+			map[i][j] -= 16;
+		}
+		for(int j = 48; j < 53; j++){
+			map[i][j] -= 16;
+		}
+	}
 
 	map[12][10] -= 8;
 	map[12][9]  -= 2;
@@ -374,6 +391,14 @@ std::vector<std::vector<int>> CreateLevelMap1(){
 
 	map[10][26] = 0;
 	map[10][36] = 0;
+
+	for(int i = 0; i < 25; i++){
+		for(int j = 0; j < 63; j++){
+			if(map[i][j] == -1){
+				map[i][j] = 31;
+			}
+		}
+	}
 
 	return map;
 }

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <array>
-#include <unordered_map>
+#include <map>
 #include "InputManager.h"
 #include "Camera.h"
 
@@ -20,7 +20,7 @@ class CharacterSprite{
 	int Time = 0;
 	int PassTime = 0;
 	std::wstring CurrentAnimName;
-	std::unordered_map<std::wstring, std::vector<DataFrames>> Anim;
+	std::map<std::wstring, std::vector<DataFrames>> Anim;
 	std::vector<ID2D1Bitmap*> AnimFrames;
 	bool Loaded = false; // Все данные загружены корректно
 	bool Usable = false; // Загружен необходимый минимум данных
@@ -45,7 +45,7 @@ class PlayerCharacter: protected CharacterSprite{
 	int SpriteDirection = 0;
 	int DirBuffer = -1;
 	bool Moving = false;
-	std::array<std::wstring, 8> MovementAnims;
+	std::array<std::wstring, 12> MovementAnims;
 
 	bool Idle = true;
 	int IdleTimer = 0;
@@ -54,7 +54,7 @@ class PlayerCharacter: protected CharacterSprite{
 	PlayerCharacter();
 	PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
 
-	void SetMovementAnims(std::array<std::wstring, 8> NewMAnim);
+	void SetMovementAnims(std::array<std::wstring, 12> NewMAnim);
 
 	void LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
 	void SetPosition(int x, int y);

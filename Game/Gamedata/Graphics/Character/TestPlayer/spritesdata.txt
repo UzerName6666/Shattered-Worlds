@@ -37,5 +37,33 @@ idle_left -1
 idle_right -1
 [IdleDown]
 idle_down -1
-[IdleUp]
-up1 -1
+[ArtIdleUp]
+art_up1 -1
+[ArtLeftStand]
+art_left1 -1
+[ArtRightStand]
+art_right1 -1
+[ArtDownStand]
+art_down1 -1
+[ArtUpStand]
+art_up1 -1
+[ArtLeftWalk]
+art_left1 16
+art_left2 16
+art_left1 16
+art_left3 16
+[ArtRightWalk]
+art_right1 16
+art_right2 16
+art_right1 16
+art_right3 16
+[ArtDownWalk]
+art_down1 16
+art_down2 16
+art_down1 16
+art_down3 16
+[ArtUpWalk]
+art_up1 16
+art_up2 16
+art_up1 16
+art_up3 16
