@@ -10,6 +10,7 @@ namespace ShatteredEngine{
         int x, y;
         Vector2D();
         Vector2D(int X, int Y);
+        bool operator ==(Vector2D vec);
     };
 
     class Camera{
@@ -52,6 +53,8 @@ namespace ShatteredEngine{
 	public:
 	PlayerInput();
 	bool Up, Down, Right, Left, Action1;
+    bool C_Up, C_Down, C_Right, C_Left, C_Action1;
+    int H_Up, H_Down, H_Right, H_Left, H_Action1;
 };
 
     class InputManager{
@@ -60,6 +63,7 @@ namespace ShatteredEngine{
 	public:
 	    InputManager();
 	    void Update(LPARAM lparam);
+        void UpdateFrame();
 	    static void AddKeyboard(HWND hwnd);
 	    const PlayerInput& GetPlayerInput(int PlayerID);
     };

@@ -54,6 +54,12 @@ int SpecialTileID(int TileID){
 	if(TileID == -1){
 		return -1;
 	}
+	if(TileID == -2){
+		return 49;
+	}
+	if(TileID == -3){
+		return 48;
+	}
 	return -1;
 }
 
@@ -89,7 +95,25 @@ void Level::Draw(int x1, int x2, int y1, int y2, int ofx, int ofy, ShatteredEngi
 }
 
 int Level::CollisionTileID(int x, int y){
-	return LevelMap.GetTileID(x, y);
+	int Tile = LevelMap.GetTileID(x, y);
+	if(Tile >= 0){
+		return Tile % 16;
+	}
+	else{
+		return 16;
+	}
+}
+
+int Level::TileID(int x, int y){
+	return LevelMap.GetTileID(x, y);;
+}
+
+void Level::SetTileID(int x, int y, int value){
+	LevelMap.SetTileID(x, y, value);
+}
+
+void Map::SetTileID(int x, int y, int value){
+	Maze[y][x] = value;
 }
 
 bool Map::SetCameraSize(ShatteredEngine::Camera& Cam){

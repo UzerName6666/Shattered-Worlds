@@ -12,25 +12,43 @@ down1 -1
 [UpStand]
 up1 -1
 [LeftWalk]
-left1 16
-left2 16
-left1 16
-left3 16
+left1 8
+left_add1 8
+left2 8
+left_add2 8
+left1 8
+left_add3 8
+left3 8
+left_add4 8
 [RightWalk]
-right1 16
-right2 16
-right1 16
-right3 16
+right1 8
+right_add1 8
+right2 8
+right_add2 8
+right1 8
+right_add3 8
+right3 8
+right_add4 8
 [DownWalk]
-down1 16
-down2 16
-down1 16
-down3 16
+down1 8
+down_add1 8
+down2 8
+down_add1 8
+down1 8
+down_add2 8
+down3 8
+down_add2 8
 [UpWalk]
-up1 16
-up2 16
-up1 16
-up3 16
+up1 8
+up_add1 8
+up2 8
+up_add1 8
+up1 8
+up_add2 8
+up3 8
+up_add2 8
+[IdleUp]
+up1 -1
 [IdleLeft]
 idle_left -1
 [IdleRight]

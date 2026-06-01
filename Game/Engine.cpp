@@ -8,6 +8,7 @@ LRESULT WINAPI ShatteredEngine::GameManager::WNDProc(HWND hwnd, UINT msg, WPARAM
 	}
 	else if(msg == WM_PAINT){
 		PlayerCamera.GetRenderTarget() -> BeginDraw();
+		InputM.UpdateFrame();
 		Update(PlayerCamera, InputM);
 		PlayerCamera.Reset();
 		PlayerCamera.GetRenderTarget() -> EndDraw();

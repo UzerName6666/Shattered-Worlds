@@ -186,6 +186,17 @@ PlayerCharacter::PlayerCharacter(): CharacterSprite(){
 
 }
 
+void PlayerCharacter::SetMovementAnims(){
+	std::array<std::wstring, 12> DefaultAnims = {
+		L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
+		L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk",
+		L"IdleUp", L"IdleRight", L"IdleDown", L"IdleLeft"
+	};
+	for(int i = 0; i < 12; i++){
+		MovementAnims[i] = DefaultAnims[i];
+	}
+}
+
 void PlayerCharacter::SetMovementAnims(std::array<std::wstring, 12> NewMAnim){
 	std::array<std::wstring, 12> DefaultAnims = {
 		L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
@@ -200,7 +211,6 @@ void PlayerCharacter::SetMovementAnims(std::array<std::wstring, 12> NewMAnim){
 			MovementAnims[i] = DefaultAnims[i];
 		}
 	}
-
 }
 
 PlayerCharacter::PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTarget): CharacterSprite(Path, pRenderTarget){
@@ -218,9 +228,9 @@ void PlayerCharacter::LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTa
 	Open(Path, pRenderTarget);
 	if(Usable){
 		std::array<std::wstring, 12> DefaultAnims = {
-			L"ArtUpStand", L"ArtRightStand", L"ArtDownStand", L"ArtLeftStand",
-			L"ArtUpWalk", L"ArtRightWalk", L"ArtDownWalk", L"ArtLeftWalk",
-			L"ArtUpStand", L"ArtRightStand", L"ArtDownStand", L"ArtLeftStand"
+			L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
+			L"UpWalk", L"RightWalk", L"DownWalk", L"LeftWalk",
+			L"IdleUp", L"IdleRight", L"IdleDown", L"IdleLeft"
 		};
 		SetMovementAnims(DefaultAnims);
 	}
@@ -228,6 +238,10 @@ void PlayerCharacter::LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTa
 
 void PlayerCharacter::Draw(ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam){
 	DrawSprite(Anim[CurrentAnimName][AnimFrame].SpriteID, Cord, Cam);
+}
+
+int PlayerCharacter::Facing(){
+	return SpriteDirection;
 }
 
 void PlayerCharacter::SetPosition(ShatteredEngine::Vector2D Cord){

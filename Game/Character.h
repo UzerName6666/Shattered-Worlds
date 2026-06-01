@@ -48,12 +48,14 @@ class PlayerCharacter: protected CharacterSprite{
 	bool Idle = true;
 	int IdleTimer = 0;
 	public:
+	bool HasArt = false;
 	int Speed = 5;
 	PlayerCharacter();
 	PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
 
 	void SetMovementAnims(std::array<std::wstring, 12> NewMAnim);
-
+	void SetMovementAnims();
+	int Facing();
 	void LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
 	void SetPosition(ShatteredEngine::Vector2D Cord);
 	int PosX();
