@@ -62,7 +62,7 @@ class PlayerCharacter: protected CharacterSprite{
 	int PosY();
 	int TilePosX();
 	int TilePosY();
-
+	bool Correct();
 	void Move(const ShatteredEngine::PlayerInput& PIn, int TileID);
 
 	void Draw(ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam);

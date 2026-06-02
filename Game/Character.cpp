@@ -1,7 +1,6 @@
 #include "Character.h"
 #include <array>
 #include <fstream>
-#include "Direct2DAdd.h"
 #include "Log.h"
 
 CharacterSprite::CharacterSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
@@ -111,7 +110,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 				int SpriteID;
 				if(FindFrame == ListAnimFrames.end()){
 					std::wstring SPath = Path + L"\\" + FrameName + L".png";
-					ID2D1Bitmap* Sprite = LoadImage(SPath, pRenderTarget);
+					ID2D1Bitmap* Sprite = ShatteredEngine::GameManager::LoadImage(SPath, pRenderTarget);
 					if(Sprite == nullptr){
 						ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File at " + SPath + L"Doesn't found");
 						return;
@@ -274,7 +273,11 @@ int PlayerCharacter::PosX(){
 int PlayerCharacter::PosY(){
 	return CordY * 32 + OffsetY + 4;
 }
-//TreeWork67
+
+bool PlayerCharacter::Correct(){
+	return Usable;
+}
+
 void PlayerCharacter::Move(const ShatteredEngine::PlayerInput& PIn, int TileID){
 	bool Active = true;
 	if(PIn.Up){
@@ -293,13 +296,18 @@ void PlayerCharacter::Move(const ShatteredEngine::PlayerInput& PIn, int TileID){
 		DirBuffer = 3;
 		IdleTimer = 0;
 	}
+	else if(PIn.Action1){
+		DirBuffer = -1;
+		IdleTimer = 0;
+		Idle = false;
+	}
 	else{
 		Active = false;
 	}
 	if(!Moving){
 		IdleTimer++;
 	}
-	if(IdleTimer >= 60 && !Idle){
+	if(IdleTimer >= 300 && !Idle){
 		Idle = true;
 		if(SpriteDirection == 0){
 			SetAnimation(MovementAnims[8]);

@@ -45,9 +45,16 @@ bool ShatteredEngine::Window::Init(HINSTANCE hInstance, ID2D1Factory* pFactory){
 	D2D1::HwndRenderTargetProperties(hwnd, size),
 	&pRenderTarget
 	);
-    ShowWindow(hwnd, 10);
     Logger::Write(Logger::Message, L"Window created");
     return true;
+}
+
+void ShatteredEngine::Window::Show(){
+	ShowWindow(hwnd, SW_SHOW);
+}
+
+void ShatteredEngine::Window::Hide(){
+	ShowWindow(hwnd, SW_HIDE);
 }
 
 ShatteredEngine::Window::Window(HINSTANCE hInstance, ID2D1Factory* pFactory){

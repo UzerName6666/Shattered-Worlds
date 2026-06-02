@@ -25,64 +25,68 @@ ShatteredEngine::InputManager::InputManager(){
 }
 
 const ShatteredEngine::PlayerInput& ShatteredEngine::InputManager::GetPlayerInput(int PlayerID){
-	return Players[0];
+	if(0 > PlayerID || PlayerID >= Players.size()){
+		return Players[0];
+	}
+	return Players[PlayerID];
 }
 
 void ShatteredEngine::InputManager::UpdateFrame(){
-	Players[0].C_Up = false;
-	Players[0].C_Down = false;
-	Players[0].C_Right = false;
-	Players[0].C_Left = false;
-	Players[0].C_Action1 = false;
+	for(int i = 0; i < Players.size(); i++){
+		Players[i].C_Up = false;
+		Players[i].C_Down = false;
+		Players[i].C_Right = false;
+		Players[i].C_Left = false;
+		Players[i].C_Action1 = false;
 
-	if(Players[0].Up && !Players[0].H_Up){
-		Players[0].C_Up = true;
-	}
-	if(Players[0].Down && !Players[0].H_Down){
-		Players[0].C_Down = true;
-	}
-	if(Players[0].Right && !Players[0].H_Right){
-		Players[0].C_Up = true;
-	}
-	if(Players[0].Left && !Players[0].H_Left){
-		Players[0].C_Left = true;
-	}
-	if(Players[0].Action1 && !Players[0].H_Action1){
-		Players[0].C_Action1 = true;
-	}
+		if(Players[i].Up && !Players[i].H_Up){
+			Players[i].C_Up = true;
+		}
+		if(Players[i].Down && !Players[i].H_Down){
+			Players[i].C_Down = true;
+		}
+		if(Players[i].Right && !Players[i].H_Right){
+			Players[i].C_Up = true;
+		}
+		if(Players[i].Left && !Players[i].H_Left){
+			Players[i].C_Left = true;
+		}
+		if(Players[i].Action1 && !Players[i].H_Action1){
+			Players[i].C_Action1 = true;
+		}
 
-
-
-	if(Players[0].Up){
-		Players[0].H_Up++;
+		if(Players[i].Up){
+			Players[i].H_Up++;
+		}
+		else{
+			Players[i].H_Up = 0;
+		}
+		if(Players[i].Down){
+			Players[i].H_Down++;
+		}
+		else{
+			Players[i].H_Down = 0;
+		}
+		if(Players[i].Right){
+			Players[i].H_Right++;
+		}
+		else{
+			Players[i].H_Right = 0;
+		}
+		if(Players[i].Left){
+			Players[i].H_Left++;
+		}
+		else{
+			Players[i].H_Left = 0;
+		}
+		if(Players[i].Action1){
+			Players[i].H_Action1++;
+		}
+		else{
+			Players[i].H_Action1 = 0;
+		}
 	}
-	else{
-		Players[0].H_Up = 0;
-	}
-	if(Players[0].Down){
-		Players[0].H_Down++;
-	}
-	else{
-		Players[0].H_Down = 0;
-	}
-	if(Players[0].Right){
-		Players[0].H_Right++;
-	}
-	else{
-		Players[0].H_Right = 0;
-	}
-	if(Players[0].Left){
-		Players[0].H_Left++;
-	}
-	else{
-		Players[0].H_Left = 0;
-	}
-	if(Players[0].Action1){
-		Players[0].H_Action1++;
-	}
-	else{
-		Players[0].H_Action1 = 0;
-	}
+	
 }
 
 void ShatteredEngine::InputManager::AddKeyboard(HWND hwnd){
@@ -103,6 +107,7 @@ void ShatteredEngine::InputManager::Update(LPARAM lparam){
 		RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(buffer.data());
 		if (raw->header.dwType == RIM_TYPEKEYBOARD){
 			RAWKEYBOARD& k = raw->data.keyboard;
+			// Player 1
 			if(k.MakeCode == 30){
 				if(k.Flags == RI_KEY_MAKE){
 					Players[0].Left = 1;

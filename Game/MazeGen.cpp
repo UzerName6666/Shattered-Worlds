@@ -1,8 +1,8 @@
-#include "MazeGen.h"
 #include <random>
 #include <stack>
 #include <iostream>
 #include <fstream>
+#include "Room.h"
 #include "Engine.h"
 /*
 Значения
@@ -10,10 +10,10 @@
 2 - Вправо
 4 - Вниз
 8 - Влево
-16 - Непосещённая клетка (Используется только при генерации)
+16 - Непосещённая клетка (Используется при генерации)
 */
 
-void GenerateMaze(std::vector<std::vector<int>>& Maze, int x1, int x2, int y1, int y2){
+void Map::GenerateMaze(std::vector<std::vector<int>>& Maze, int x1, int x2, int y1, int y2){
 	int m = Maze.size(), n = Maze[0].size();
 	std::random_device Seed;
 	std::mt19937 RNGEngine(Seed());
@@ -93,58 +93,7 @@ void GenerateMaze(std::vector<std::vector<int>>& Maze, int x1, int x2, int y1, i
 	}
 }
 
-std::vector<std::vector<int>> CreateBasicMapLayout(unsigned int n, unsigned int m){
-	std::vector<std::vector<int>> Maze(m, std::vector<int>(n, 31));
-
-	GenerateMaze(Maze, 0, n, 0, m);
-
-	return Maze;
-}
-
-std::vector<std::vector<int>> CreateMapLayoutLevel1Part(unsigned int side){
-	std::vector<std::vector<int>> Maze(25, std::vector<int>(25, 31));
-	for(int i = 10; i < 15; i++){
-		for(int j = 10; j < 15; j++){
-			Maze[i][j] = 0;
-		}
-	}
-	for(int i = 10; i < 15; i++){
-		Maze[10][i] += 1;
-		Maze[i][14] += 2;
-		Maze[14][i] += 4;
-		Maze[i][10] += 8;
-	}
-	
-	//GenerateMaze(Maze);
-
-	switch (side){
-	case 0: // Вверхняя комната
-		Maze[10][12] -= 1;
-		Maze[9][12]  -= 4;
-		Maze[24][12] -= 4;
-		break;
-	case 1: // Правая комната
-		Maze[12][14] -= 2;
-		Maze[12][15] -= 8;
-		Maze[12][0]  -= 8;
-		break;
-	case 2: // Нижняя комната
-		Maze[14][12] -= 4;
-		Maze[15][12] -= 1;
-		Maze[0][12]  -= 1;
-		break;
-	case 3: // Левая комната
-		Maze[12][10] -= 8;
-		Maze[12][9]  -= 2;
-		Maze[12][24] -= 2;
-		break;
-	default:
-		break;
-	}
-	return Maze;
-}
-
-std::vector<std::vector<int>> CreateLevelMap1(){
+std::vector<std::vector<int>> Map::CreateLevelMap1(){
 	std::vector<std::vector<int>> map(25, std::vector<int>(63, -1));
 	for(int i = 0; i < 25; i++){
 		for(int j = 0; j < 25; j++){
@@ -285,5 +234,8 @@ std::vector<std::vector<int>> CreateLevelMap1(){
 	map[15][29] = -2;
 	map[12][12] = -3;
 	map[12][50] = -3;
+	map[24][30] = -4;
+	map[24][31] = -5;
+	map[24][32] = -6;
 	return map;
 }

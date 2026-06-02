@@ -14,6 +14,9 @@ class Map{
 	int GetTileID(int x, int y);
 	bool SetCameraSize(ShatteredEngine::Camera& Cam);
 	void SetTileID(int x, int y, int value);
+	
+	static void GenerateMaze(std::vector<std::vector<int>>& Maze, int x1, int x2, int y1, int y2);
+	static std::vector<std::vector<int>> CreateLevelMap1();
 };
 
 class Level{

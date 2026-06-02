@@ -47,7 +47,13 @@ Level::Level(Map Collision, TileSet DebugTileSet){
 }
 
 void Level::AddTileSet(TileSet NewTileset){
-	Tiles.push_back(NewTileset);
+	if(NewTileset.IsLoaded()){
+		Tiles.push_back(NewTileset);
+	}
+	else{
+		ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Error, L"Trying load a broken tileset");
+	}
+	
 }
 
 int SpecialTileID(int TileID){
@@ -59,6 +65,15 @@ int SpecialTileID(int TileID){
 	}
 	if(TileID == -3){
 		return 48;
+	}
+	if(TileID == -4){
+		return 40;
+	}
+	if(TileID == -5){
+		return 32;
+	}
+	if(TileID == -6){
+		return 34;
 	}
 	return -1;
 }
@@ -100,7 +115,7 @@ int Level::CollisionTileID(int x, int y){
 		return Tile % 16;
 	}
 	else{
-		return 16;
+		return SpecialTileID(Tile);
 	}
 }
 

@@ -1,6 +1,5 @@
 #include "Tileset.h"
 #include <fstream>
-#include "Direct2DAdd.h"
 #include "Log.h"
 TileSet::TileSet(){
 	
@@ -14,7 +13,7 @@ void TileSet::Open(std::wstring Path, ID2D1RenderTarget* RenderTarget){
 	Loaded = true;
 	for(int i = 0; i < 17; i++){
 		std::wstring tstr = Path + L"\\tile_" + std::to_wstring(i) + L".png";
-		ID2D1Bitmap* Image = LoadImage(tstr, RenderTarget);
+		ID2D1Bitmap* Image = ShatteredEngine::GameManager::LoadImage(tstr, RenderTarget);
 		if(!Image){
 			std::wstring M = L"Tile " + std::to_wstring(i) + L" doesn't found at " + Path;
 			ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, M);

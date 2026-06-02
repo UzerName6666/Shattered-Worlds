@@ -1,10 +1,10 @@
 #include "win.h"
-#include "Direct2DAdd.h"
+#include "Engine.h"
 #include <wincodec.h>
 #include <wrl/client.h>
 #pragma comment(lib, "Windowscodecs.lib")
 #pragma comment(lib, "ole32.lib")
-ID2D1Bitmap* LoadImage(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
+ID2D1Bitmap* ShatteredEngine::GameManager::LoadImage(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 	ID2D1Bitmap* Image = nullptr;
 	HRESULT hr = CoInitialize(nullptr);
 	Microsoft::WRL::ComPtr<IWICImagingFactory> IFactory;

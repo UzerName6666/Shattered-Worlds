@@ -1,40 +1,38 @@
 #include "Character.h"
 #include "Tileset.h"
 #include "Room.h"
-#include "MazeGen.h"
 #include "Engine.h"
 Level TestMaze;
 PlayerCharacter TestCharacter;
 
-void Init(ShatteredEngine::Camera& PlayerCamera){
+bool ShatteredEngine::GameManager::Init(){
 	TileSet DebugSet(L"Gamedata\\Graphics\\Tileset\\Test", PlayerCamera.GetRenderTarget());
+	if(!DebugSet.IsLoaded()){
+		return false;
+	}
+	// Остальные не вызывают крашей и без них работает
 	TileSet GrassSet(L"Gamedata\\Graphics\\Tileset\\Grass", PlayerCamera.GetRenderTarget());
 	TileSet BuildSet(L"Gamedata\\Graphics\\Tileset\\Building", PlayerCamera.GetRenderTarget());
 	TileSet ObjectSet(L"Gamedata\\Graphics\\Tileset\\Objects", PlayerCamera.GetRenderTarget());
-	Map TestMap(CreateLevelMap1());
+
+	Map TestMap(Map::CreateLevelMap1());
 	TestMaze = Level(TestMap, DebugSet);
 	TestMaze.AddTileSet(GrassSet);
 	TestMaze.AddTileSet(BuildSet);
-	TestMaze.AddTileSet(ObjectSet);
+	TestMaze.AddTileSet(ObjectSet); 
 	TestMaze.SetCameraSize(PlayerCamera);
 	TestCharacter.LoadSprite(L"Gamedata\\Graphics\\Character\\TestPlayer", PlayerCamera.GetRenderTarget());
+	if(!TestCharacter.Correct()){
+		return false;
+	}
 	ShatteredEngine::Vector2D StartPos(31, 12);
 	TestCharacter.SetPosition(StartPos);
+	
+	return true;
 }
 
-void Update(ShatteredEngine::Camera& PlayerCamera, ShatteredEngine::InputManager& InputM){
+bool ShatteredEngine::GameManager::Update(){
 	ShatteredEngine::PlayerInput PIn= InputM.GetPlayerInput(0);
-	if(PIn.Action1){
-		TestCharacter.Move(PIn, 0);
-	}
-	else{
-		TestCharacter.Move(PIn, TestMaze.CollisionTileID(TestCharacter.TilePosX(), TestCharacter.TilePosY()));
-	}
-	ShatteredEngine::Vector2D CameraOffset(TestCharacter.PosX() + 156, TestCharacter.PosY() + 156);
-	PlayerCamera.SetPosition(CameraOffset);
-	ShatteredEngine::Vector2D CharacterPos(TestCharacter.PosX(), TestCharacter.PosY() - 8);
-	TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, false);
-	TestCharacter.Draw(CharacterPos, PlayerCamera);
 	if(PIn.C_Action1){
 		int Fac = TestCharacter.Facing();
 		int dir;
@@ -100,4 +98,20 @@ void Update(ShatteredEngine::Camera& PlayerCamera, ShatteredEngine::InputManager
 			}
 		}
 	}
+	Vector2D TileCord = ShatteredEngine::Vector2D(TestCharacter.TilePosX(), TestCharacter.TilePosY());
+	int Tile = TestMaze.TileID(TileCord.x, TileCord.y);
+	if(Tile == -4 || Tile == -5 || Tile == -6){
+		MainWindow.Hide();
+		int r = MessageBox(NULL, L"You win!!!", L"Game", MB_ICONINFORMATION);
+		if(r == IDOK || r == IDCLOSE){
+			return false;
+		}
+	}
+	TestCharacter.Move(PIn, TestMaze.CollisionTileID(TileCord.x, TileCord.y));
+	ShatteredEngine::Vector2D CameraOffset(TestCharacter.PosX() + 156, TestCharacter.PosY() + 156);
+	PlayerCamera.SetPosition(CameraOffset);
+	ShatteredEngine::Vector2D CharacterPos(TestCharacter.PosX(), TestCharacter.PosY() - 8);
+	TestMaze.Draw(0, 65, 0, 25, 0, 0, PlayerCamera, false);
+	TestCharacter.Draw(CharacterPos, PlayerCamera);
+	return true;
 }

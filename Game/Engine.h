@@ -47,6 +47,8 @@ namespace ShatteredEngine{
         HWND GetHWND();
         ID2D1HwndRenderTarget* GetRenderTarget();
         bool Loaded();
+        void Show();
+        void Hide();
     };
 
     class PlayerInput{
@@ -76,7 +78,8 @@ namespace ShatteredEngine{
             static inline ID2D1Factory* pDFactory;
             static LRESULT WINAPI WNDProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
             GameManager(HINSTANCE hInstance);
+            static ID2D1Bitmap* LoadImage(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
+            static bool Init();
+            static bool Update();
     };
 };
-void Init(ShatteredEngine::Camera& PlayerCamera);
-void Update(ShatteredEngine::Camera& PlayerCamera, ShatteredEngine::InputManager& InputM);

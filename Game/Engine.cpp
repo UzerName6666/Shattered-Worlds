@@ -9,9 +9,13 @@ LRESULT WINAPI ShatteredEngine::GameManager::WNDProc(HWND hwnd, UINT msg, WPARAM
 	else if(msg == WM_PAINT){
 		PlayerCamera.GetRenderTarget() -> BeginDraw();
 		InputM.UpdateFrame();
-		Update(PlayerCamera, InputM);
-		PlayerCamera.Reset();
-		PlayerCamera.GetRenderTarget() -> EndDraw();
+		if (Update()){
+			PlayerCamera.Reset();
+			PlayerCamera.GetRenderTarget() -> EndDraw();
+		}
+		else{
+			PostQuitMessage(0);
+		}
 	}
 	else if(msg == WM_DESTROY){
 		PostQuitMessage(0);
@@ -24,14 +28,21 @@ ShatteredEngine::GameManager::GameManager(HINSTANCE hInstance){
     Logger::Init();
     Logger::Write(Logger::Message, L"GameManager begin loading");
     D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pDFactory);
-    Window MainWindow(hInstance, pDFactory);
+    MainWindow = Window(hInstance, pDFactory);
     InputM.AddKeyboard(MainWindow.GetHWND());
     PlayerCamera = Camera(MainWindow.GetRenderTarget());
     MSG msg;
-    Init(PlayerCamera);
-    while (GetMessage(&msg, NULL, 0, 0)){
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-		InvalidateRect(MainWindow.GetHWND(), NULL, false);
+    bool Loaded = Init();
+	if(!Loaded){
+		MessageBox(MainWindow.GetHWND(), L"Critical error happened during loading. Check game files", L"Shattered Engine", MB_ICONERROR);
 	}
+	else{
+		MainWindow.Show();
+		while (GetMessage(&msg, NULL, 0, 0)){
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+			InvalidateRect(MainWindow.GetHWND(), NULL, false);
+		}
+	}
+    
 }
