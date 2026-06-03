@@ -24,9 +24,9 @@ class CharacterSprite{
 	bool Usable = false; // Загружен необходимый минимум данных
 
 	public:
-	CharacterSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
+	CharacterSprite(std::wstring Path, ShatteredEngine::Window& wind);
 	CharacterSprite();
-	void Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
+	void Open(std::wstring Path, ShatteredEngine::Window& wind);
 	void DrawSprite(int SpriteID, ShatteredEngine::Vector2D Cord, ShatteredEngine::Camera& Cam);
 	bool IsLoaded();
 	bool IsUsable();
@@ -51,12 +51,12 @@ class PlayerCharacter: protected CharacterSprite{
 	bool HasArt = false;
 	int Speed = 5;
 	PlayerCharacter();
-	PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
+	PlayerCharacter(std::wstring Path, ShatteredEngine::Window& wind);
 
 	void SetMovementAnims(std::array<std::wstring, 12> NewMAnim);
 	void SetMovementAnims();
 	int Facing();
-	void LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget);
+	void LoadSprite(std::wstring Path, ShatteredEngine::Window& wind);
 	void SetPosition(ShatteredEngine::Vector2D Cord);
 	int PosX();
 	int PosY();

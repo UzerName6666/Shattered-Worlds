@@ -5,15 +5,15 @@ TileSet::TileSet(){
 	
 }
 
-TileSet::TileSet(std::wstring Path, ID2D1RenderTarget* RenderTarget){
-	Open(Path, RenderTarget);
+TileSet::TileSet(std::wstring Path, ShatteredEngine::Window& wind){
+	Open(Path, wind);
 }
 
-void TileSet::Open(std::wstring Path, ID2D1RenderTarget* RenderTarget){
+void TileSet::Open(std::wstring Path, ShatteredEngine::Window& wind){
 	Loaded = true;
 	for(int i = 0; i < 17; i++){
 		std::wstring tstr = Path + L"\\tile_" + std::to_wstring(i) + L".png";
-		ID2D1Bitmap* Image = ShatteredEngine::GameManager::LoadImage(tstr, RenderTarget);
+		ID2D1Bitmap* Image = wind.LoadImage(tstr);
 		if(!Image){
 			std::wstring M = L"Tile " + std::to_wstring(i) + L" doesn't found at " + Path;
 			ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, M);

@@ -8,9 +8,9 @@ class TileSet{
 		bool Loaded = false;
 	public:
 		TileSet();
-		TileSet(std::wstring Path, ID2D1RenderTarget* RenderTarget);
+		TileSet(std::wstring Path, ShatteredEngine::Window& wind);
 		ID2D1Bitmap& Tile(int i);
-		void Open(std::wstring Path, ID2D1RenderTarget* RenderTarget);
+		void Open(std::wstring Path, ShatteredEngine::Window& wind);
 		bool IsLoaded();	
 		void Draw(ShatteredEngine::Camera& Cam, ShatteredEngine::Vector2D Cord, int i);
 };

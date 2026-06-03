@@ -3,8 +3,8 @@
 #include <fstream>
 #include "Log.h"
 
-CharacterSprite::CharacterSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
-	Open(Path, pRenderTarget);
+CharacterSprite::CharacterSprite(std::wstring Path, ShatteredEngine::Window& wind){
+	Open(Path, wind);
 }
 CharacterSprite::CharacterSprite(){
 
@@ -63,7 +63,7 @@ void CharacterSprite::PlayAnimation(int time){
 	}
 }
 
-void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
+void CharacterSprite::Open(std::wstring Path, ShatteredEngine::Window& wind){
 	std::wifstream CharData(Path + L"\\spritesdata.txt");
 	if(CharData.is_open()){
 		ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Message, L"Loading character sprites from " + Path);
@@ -110,7 +110,7 @@ void CharacterSprite::Open(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
 				int SpriteID;
 				if(FindFrame == ListAnimFrames.end()){
 					std::wstring SPath = Path + L"\\" + FrameName + L".png";
-					ID2D1Bitmap* Sprite = ShatteredEngine::GameManager::LoadImage(SPath, pRenderTarget);
+					ID2D1Bitmap* Sprite = wind.LoadImage(SPath);
 					if(Sprite == nullptr){
 						ShatteredEngine::Logger::Write(ShatteredEngine::Logger::Warn, L"File at " + SPath + L"Doesn't found");
 						return;
@@ -212,7 +212,7 @@ void PlayerCharacter::SetMovementAnims(std::array<std::wstring, 12> NewMAnim){
 	}
 }
 
-PlayerCharacter::PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTarget): CharacterSprite(Path, pRenderTarget){
+PlayerCharacter::PlayerCharacter(std::wstring Path, ShatteredEngine::Window& wind): CharacterSprite(Path, wind){
 	if(Usable){
 		std::array<std::wstring, 12> DefaultAnims = {
 			L"UpStand", L"RightStand", L"DownStand", L"LeftStand",
@@ -223,8 +223,8 @@ PlayerCharacter::PlayerCharacter(std::wstring Path, ID2D1RenderTarget* pRenderTa
 	}
 }
 
-void PlayerCharacter::LoadSprite(std::wstring Path, ID2D1RenderTarget* pRenderTarget){
-	Open(Path, pRenderTarget);
+void PlayerCharacter::LoadSprite(std::wstring Path, ShatteredEngine::Window& wind){
+	Open(Path, wind);
 	if(Usable){
 		std::array<std::wstring, 12> DefaultAnims = {
 			L"UpStand", L"RightStand", L"DownStand", L"LeftStand",

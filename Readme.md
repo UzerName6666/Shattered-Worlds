@@ -19,6 +19,7 @@ ShatteredEngine
 ├─── Window
 ├─── InputManager
 │    └─── PlayerInput
+├-─- GameData (Game)
 └─── Log
 ```
 ### Часть 2:
